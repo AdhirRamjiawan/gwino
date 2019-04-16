@@ -4,6 +4,9 @@
 *.dll
 *.so
 *.dylib
+*.o
+gwino/_obj/_cgo_.o
+.vscode/*
 
 # Test binary, build with `go test -c`
 *.test

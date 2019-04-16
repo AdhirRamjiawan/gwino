@@ -1,0 +1,1 @@
+.\clean.bat & .\sync-git.bat %1

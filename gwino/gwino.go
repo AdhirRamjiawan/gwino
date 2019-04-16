@@ -14,7 +14,6 @@ var mainCallBack func()
 //export libWin32MainCallback
 func libWin32MainCallback() {
 	mainCallBack()
-	
 }
 
 func MsgBox(msg, title string) {
@@ -23,10 +22,20 @@ func MsgBox(msg, title string) {
 	defer C.free(unsafe.Pointer(cstr1))
 	defer C.free(unsafe.Pointer(cstr2))
 
-	C.GowinMsgBox(cstr1, cstr2)
+	C.GwinoMsgBox(cstr1, cstr2)
+}
+
+func Window(title string, width, height int) {
+	cstr1 := C.CString(title)
+	cint1 := C.int(width)
+	cint2 := C.int(height)
+
+	defer C.free(unsafe.Pointer(cstr1))
+	
+	C.GwinoWindow(cstr1, cint1, cint2)
 }
 
 func Run(f func()) {
 	mainCallBack = f
-	C.GowinRunMain()
+	C.GwinoRunMain()
 }

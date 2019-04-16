@@ -5,6 +5,7 @@
 *.so
 *.dylib
 *.o
+gwino/_obj
 gwino/_obj/_cgo_.o
 .vscode/*
 

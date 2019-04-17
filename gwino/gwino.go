@@ -10,6 +10,13 @@ import (
 var mainCallBack func()
 var mouseDownEventHandler func()
 
+// =========================================================================
+//
+//              GOLANG METHODS CALLED IN C
+//
+// =========================================================================
+
+
 // DO NOT REMOVE BELOW EXPORT COMMENT!! USED TO INTERFACE WITH C CODE!!!
 
 //export libWin32MainCallback

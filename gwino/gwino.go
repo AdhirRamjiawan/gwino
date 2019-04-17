@@ -8,12 +8,18 @@ import (
 )
 
 var mainCallBack func()
+var mouseDownEventHandler func()
 
 // DO NOT REMOVE BELOW EXPORT COMMENT!! USED TO INTERFACE WITH C CODE!!!
 
 //export libWin32MainCallback
 func libWin32MainCallback() {
 	mainCallBack()
+}
+
+//export MouseDownEventHandler
+func MouseDownEventHandler() {
+	mouseDownEventHandler()
 }
 
 func MsgBox(msg, title string) {
@@ -35,7 +41,8 @@ func Window(title string, width, height int) {
 	C.GwinoWindow(cstr1, cint1, cint2)
 }
 
-func Run(f func()) {
+func Run(f func(), f2 func()) {
 	mainCallBack = f
+	mouseDownEventHandler = f2
 	C.GwinoRunMain()
 }

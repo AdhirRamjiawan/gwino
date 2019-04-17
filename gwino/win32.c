@@ -1,5 +1,7 @@
 #include "win32.h"
 
+
+// almost like a template for this window
 const char wndClassName[] = "windowClass";
 
 // =========================================================================
@@ -32,10 +34,16 @@ void GwinoWindow(const char *title, int width, int height)
 // =========================================================================
 
 
+
+
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch(msg)
     {
+        case WM_LBUTTONDOWN: 
+            //MessageBox(NULL, "msg", "title", MB_OK);
+            MouseDownEventHandler();
+        break;
         case WM_CLOSE:
             DestroyWindow(hwnd);
         break;
@@ -77,7 +85,6 @@ void InitWindow(HINSTANCE hInstance, const char *title, int width, int height)
     {
         MessageBox(NULL, "Window Reg Error!", "Error!",
             MB_ICONEXCLAMATION | MB_OK);
-        return 0;
     }
 
     hwnd = CreateWindowEx(
@@ -92,7 +99,6 @@ void InitWindow(HINSTANCE hInstance, const char *title, int width, int height)
     {
         MessageBox(NULL, "Window Creation Failed!", "Error!",
             MB_ICONEXCLAMATION | MB_OK);
-        return 0;
     }
 
     ShowWindow(hwnd, SW_SHOWNORMAL);
@@ -104,7 +110,7 @@ void InitWindow(HINSTANCE hInstance, const char *title, int width, int height)
         TranslateMessage(&Msg);
         DispatchMessage(&Msg);
     }
-    return Msg.wParam;
+    //return Msg.wParam;
 
 }
 

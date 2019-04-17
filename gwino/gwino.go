@@ -29,6 +29,13 @@ func MouseDownEventHandler() {
 	mouseDownEventHandler()
 }
 
+
+
+// =========================================================================
+//
+//              GOLANG METHODS EXPOSED AS GWINO API
+//
+// =========================================================================
 func MsgBox(msg, title string) {
 	cstr1 := C.CString(msg)
 	cstr2 := C.CString(title)

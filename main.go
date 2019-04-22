@@ -6,12 +6,21 @@ import (
 )
 
 func main() {
-	menuItems := make([]gwino.WndMenuItem, 0)
-	menuItems = append(menuItems, gwino.WndMenuItem{"&File"})
+
+	menuItems := gwino.CreateMenuList()
+	menu1 := gwino.CreateMenuListItem("&File")
+	menu2 := gwino.CreateMenuListItem("&File2")
+	menu3 := gwino.CreateMenuListItem("&File3")
+
+	menuItems = append(menuItems, menu1)
+	menuItems = append(menuItems, menu2)
+	menuItems = append(menuItems, menu3)
+
+	wndProps := gwino.WndProps{"test window", 800, 640, menuItems}
 
 	mainFunc := func() {
 		fmt.Println("testing gwino...")
-		gwino.Window("test window", 800, 640, menuItems)	
+		gwino.Window(wndProps)	
 	}
 
 	mouseDownHandler := func() {

@@ -18,6 +18,11 @@ int GwinoRunMain()
     return retCode;
 }
 
+void GwinoCleanUp()
+{
+    // NEED TO ADD ALL FREE FOR MALLOC ETC HERE AND CALL IT SOMEWHERE
+}
+
 void GwinoMsgBox(const char *msg, const char *title)
 {
     MessageBox(NULL, msg, title, MB_OK);
@@ -38,8 +43,10 @@ void GwinoInitMenuItems()
 void GwinoAppendMenuItem(char *text)
 {
     gwinoMenuItems->Next = (struct GwinoMenuItem *) malloc(sizeof(struct GwinoMenuItem));
+    
     gwinoMenuItems->Next->Head = gwinoMenuItems->Head;
-    strcpy(gwinoMenuItems->Text, text);
+    gwinoMenuItems->Next->Text = (char *)malloc(sizeof(char) * strlen(text));
+    strcpy(gwinoMenuItems->Next->Text, text);
     
     gwinoMenuItems = gwinoMenuItems->Next;
 }
@@ -60,19 +67,19 @@ void SetupMenu(HWND hwnd)
 
     hMenu = CreateMenu();
     hSubMenu = CreatePopupMenu();
-    AppendMenu(hSubMenu, MF_STRING, ID_FILE_EXIT, "E&xit");
-    AppendMenu(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu, "&File");
+    //AppendMenu(hSubMenu, MF_STRING, ID_FILE_EXIT, "E&xit");
+    //AppendMenu(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu, "&File");
 
-    //gwinoMenuItems = gwinoMenuItems->Head;
+    gwinoMenuItems = gwinoMenuItems->Head->Next;
 
-    /*while (gwinoMenuItems != NULL)
+    while (gwinoMenuItems != NULL)
     {  
         HMENU hSubMenu = CreatePopupMenu();
 
         AppendMenu(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu, gwinoMenuItems->Text);
         gwinoMenuItems = gwinoMenuItems->Next;
     }
-*/
+
     SetMenu(hwnd, hMenu);
 
     hIcon = LoadImage(NULL, "file.ico", IMAGE_ICON, 16, 16, LR_LOADFROMFILE);

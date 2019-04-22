@@ -12,6 +12,7 @@ struct GwinoMenuItem
     struct GwinoMenuItem *Head;
 };
 
+void    GwinoCleanUp();
 void    GwinoAppendMenuItem(char *text);
 void    GwinoInitMenuItems();
 int     GwinoRunMain();

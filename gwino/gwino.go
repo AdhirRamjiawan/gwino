@@ -30,7 +30,6 @@ func MouseDownEventHandler() {
 }
 
 
-
 // =========================================================================
 //
 //              GOLANG METHODS EXPOSED AS GWINO API
@@ -40,6 +39,13 @@ func MouseDownEventHandler() {
 type WndMenuItem struct {
 	Text		string
 	//Children	[]WndMenuItem
+}
+
+type WndProps struct {
+	Title			string
+	Width			int
+	Height			int
+	WndMenuItems	[]WndMenuItem
 }
 
 
@@ -52,18 +58,27 @@ func MsgBox(msg, title string) {
 	C.GwinoMsgBox(cstr1, cstr2)
 }
 
-func Window(title string, width, height int, wndMenuItems []WndMenuItem) {
-	cstr1 := C.CString(title)
-	cint1 := C.int(width)
-	cint2 := C.int(height)
-	
-	/*C.GwinoInitMenuItems();
+func CreateMenuList() []WndMenuItem {
+	menuItems := make([]WndMenuItem, 0)
+	return menuItems
+}
 
-	for _, item := range wndMenuItems {
+func CreateMenuListItem(text string) WndMenuItem {
+	return WndMenuItem{text}
+}
+
+func Window(props WndProps) {
+	cstr1 := C.CString(props.Title)
+	cint1 := C.int(props.Width)
+	cint2 := C.int(props.Height)
+	
+	C.GwinoInitMenuItems();
+
+	for _, item := range props.WndMenuItems {
 		cstr2 := C.CString(item.Text)
 		defer C.free(unsafe.Pointer(cstr2))
 		C.GwinoAppendMenuItem(cstr2)
-	}*/
+	}
 
 	defer C.free(unsafe.Pointer(cstr1))
 

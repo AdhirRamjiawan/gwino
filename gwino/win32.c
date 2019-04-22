@@ -4,6 +4,8 @@
 // almost like a template for this window
 const char wndClassName[] = "windowClass";
 
+struct GwinoMenuItem *gwinoMenuItems;
+
 // =========================================================================
 //
 //              GOLANG METHODS
@@ -12,7 +14,7 @@ const char wndClassName[] = "windowClass";
 
 int GwinoRunMain()
 {
-    int retCode = WinMain(NULL, NULL,NULL, 1);
+    int retCode = WinMain(NULL, NULL, NULL, 1);
     return retCode;
 }
 
@@ -27,14 +29,59 @@ void GwinoWindow(const char *title, int width, int height)
     InitWindow(hInstance, title, width, height);
 }
 
+void GwinoInitMenuItems()
+{
+    gwinoMenuItems = (struct GwinoMenuItem *) malloc(sizeof(struct GwinoMenuItem));
+    gwinoMenuItems->Head = gwinoMenuItems;
+}
+
+void GwinoAppendMenuItem(char *text)
+{
+    gwinoMenuItems->Next = (struct GwinoMenuItem *) malloc(sizeof(struct GwinoMenuItem));
+    gwinoMenuItems->Next->Head = gwinoMenuItems->Head;
+    strcpy(gwinoMenuItems->Text, text);
+    
+    gwinoMenuItems = gwinoMenuItems->Next;
+}
+
+
 // =========================================================================
 //
 //              WIN32 METHODS
 //
 // =========================================================================
 
+#define ID_FILE_EXIT 9001
 
+void SetupMenu(HWND hwnd)
+{
+    HMENU hMenu, hSubMenu;
+    HICON hIcon;
 
+    hMenu = CreateMenu();
+    hSubMenu = CreatePopupMenu();
+    AppendMenu(hSubMenu, MF_STRING, ID_FILE_EXIT, "E&xit");
+    AppendMenu(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu, "&File");
+
+    //gwinoMenuItems = gwinoMenuItems->Head;
+
+    /*while (gwinoMenuItems != NULL)
+    {  
+        HMENU hSubMenu = CreatePopupMenu();
+
+        AppendMenu(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu, gwinoMenuItems->Text);
+        gwinoMenuItems = gwinoMenuItems->Next;
+    }
+*/
+    SetMenu(hwnd, hMenu);
+
+    hIcon = LoadImage(NULL, "file.ico", IMAGE_ICON, 16, 16, LR_LOADFROMFILE);
+    if(hIcon)
+        SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
+    else
+        MessageBox(hwnd, "Could not load large icon!", "Error", MB_OK | MB_ICONERROR);
+        
+}
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -43,6 +90,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         case WM_LBUTTONDOWN: 
             //MessageBox(NULL, "msg", "title", MB_OK);
             MouseDownEventHandler();
+        break;
+        case WM_CREATE:
+            SetupMenu(hwnd);
         break;
         case WM_CLOSE:
             DestroyWindow(hwnd);
@@ -104,7 +154,6 @@ void InitWindow(HINSTANCE hInstance, const char *title, int width, int height)
     ShowWindow(hwnd, SW_SHOWNORMAL);
     UpdateWindow(hwnd);
 
-    // Step 3: The Message Loop
     while(GetMessage(&Msg, NULL, 0, 0) > 0)
     {
         TranslateMessage(&Msg);

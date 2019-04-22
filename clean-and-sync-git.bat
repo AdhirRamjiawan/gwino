@@ -1,1 +1,1 @@
-.\clean.bat & .\sync-git.bat %1
+.\clean.bat & .\sync-git.bat %1 %2
